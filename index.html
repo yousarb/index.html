@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wi-Fi Source MAC Address Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .loader {
+            display: none;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>WIFI SOURCE MAC ADDRESS CHECKER</h1>
+    <input type="text" id="macInput" placeholder="Enter MAC Address" />
+    <button onclick="checkSource()">Check Source</button>
+    <div class="loader" id="loader"></div>
+    <div id="result"></div>
+
+    <script>
+        const macAddresses = {
+            "02:99:B2:F9:88:78": "OPPO A16k",
+            "6C:F7:84:3A:53:8C": "M2006C3LG-Redmi9A",
+            "90:97:F3:DD:A3:BC": "Galaxy J7 Prime",
+            "9C:BC:F0:1C:53:2A": "M2010J19SG-Redmi9T",
+            "DA:1F:76:42:D9:6F": "Galaxy A14",
+            "9A:B8:C7:0C:A3:78": "Galaxy A20s",
+            "C6:4B:46:F3:D1:0C": "Infinix SMART 6",
+        };
+
+        const wifiSharing = {
+            "OPPO A16k": ["M2006C3LG-Redmi9A"],
+            "M2006C3LG-Redmi9A": ["Galaxy A20s"],
+            "Galaxy A20s": ["M2010J19SG-Redmi9T", "Galaxy A14"],
+            "Galaxy A14": ["Infinix SMART 6"],
+        };
+
+        function checkSource() {
+            const input = document.getElementById("macInput").value;
+            const loader = document.getElementById("loader");
+            const result = document.getElementById("result");
+
+            loader.style.display = "block";
+            result.innerHTML = "";
+
+            setTimeout(() => {
+                loader.style.display = "none";
+
+                const phone = macAddresses[input];
+                if (phone) {
+                    const sharedWith = wifiSharing[phone] || [];
+                    const message = `The phone ${phone} shared Wi-Fi with: ${sharedWith.join(", ") || "No one"}`;
+                    result.innerHTML = message;
+                } else {
+                    result.innerHTML = "MAC Address not found!";
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
